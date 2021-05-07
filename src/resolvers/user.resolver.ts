@@ -1,9 +1,8 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { BaseUserResponse, User } from "../../src/entity/User";
+import { User } from "../../src/entity/User";
 import { Context } from "../types/context";
-import { Throwable } from "../types/general";
 import { encrypt } from "../utils/encrypt.utils";
-import { handleError, handlePublicError } from "../utils/error.utils";
+import { handleError } from "../utils/error.utils";
 
 @Resolver()
 export class UserResolver {
@@ -12,29 +11,21 @@ export class UserResolver {
         return "Hello World!";
     }
 
-    // @Query(() => [User])
-    // async getAllUsers(): Promise<Throwable<User[]>> {
-    //     try {
-    //         return await User.find();
-    //     } catch (err) {
-    //         return handlePublicError(err, "GET ALL USERS");
-    //     }
-    // }
+    @Query(() => [User])
+    async getAllUsers(
+        @Ctx() context: Context,
+    ): Promise<User[]> {
+        return await context.db.user.getAllUsers();
+    }
+    
+    @Query(() => User, { nullable: true })
+    async getUserById(
+        @Ctx() context: Context,
+        @Arg('id', () => Number) id: number,
+    ): Promise<User> {
+        return await context.db.user.getUserById(id) as User;
+    }
 
-    // @Query(() => User, { nullable: true })
-    // async getUserById(
-    //     @Arg("id", () => Number) id: number
-    // ): Promise<User> {
-    //     try {
-    //         return await User.findOne({
-    //             where: {
-    //                 id,
-    //             },
-    //         }) as User;
-    //     } catch (err) {
-    //         return handlePublicError(err, "GET USER BY ID");
-    //     }
-    // }
 
     @Mutation(() => Boolean)
     async register(
