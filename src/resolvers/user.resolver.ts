@@ -1,5 +1,4 @@
-import bcrypt from "bcrypt";
-import { handlePublicError } from "src/utils/error-utils";
+import { handlePublicError } from "../utils/error.utils";
 import { Arg, ID, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../../src/entity/User";
 
@@ -42,7 +41,7 @@ export class UserResolver {
         try {
             const { raw } = await User.insert({
                 email,
-                password: await UserResolver.hashPassword(password),
+                password: await hash(password, 12),
             });
             
             return raw;
@@ -50,6 +49,4 @@ export class UserResolver {
             return handlePublicError(err, "REGISTER USER");
         }
     }
-
-    static hashPassword = async (password: string) => bcrypt.hash(password, 12);
 }

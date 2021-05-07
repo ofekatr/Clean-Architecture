@@ -1,11 +1,13 @@
+import logger from "../logs/logger";
+
 const DEF_PUBLIC_ERROR_DESC = "An error has occurred";
 
 export const handleError = (err: Error) => {
-    console.error(err);
+    logger.error(err);
 }
 
-export const throwPublicDescription = (description: string): never => {
-    throw description;
+export const throwPublicMessage = (message: string): never => {
+    throw message;
 }
 
 export const handlePublicError = (
@@ -13,5 +15,5 @@ export const handlePublicError = (
     message: string = DEF_PUBLIC_ERROR_DESC
 ): never => {
     handleError(err);
-    return throwPublicDescription(message);
+    return throwPublicMessage(message);
 }
