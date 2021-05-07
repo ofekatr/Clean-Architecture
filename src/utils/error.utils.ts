@@ -1,9 +1,7 @@
 import { ApolloError } from "apollo-server-errors";
+import { DEF_PUBLIC_ERROR_DESC, DEF_PUBLIC_ERROR_STATUS } from "../constants/error.constants";
 import logger from "../logger/logger";
 import { GeneralObject } from "../types/general";
-
-const DEF_PUBLIC_ERROR_DESC = "An error has occurred";
-const DEF_PUBLIC_ERROR_STATUS = "GENERAL_ERROR";
 
 export const handleError = (err: Error) => {
     logger.error(err);
