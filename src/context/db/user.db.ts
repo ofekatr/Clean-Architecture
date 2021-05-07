@@ -8,6 +8,8 @@ const userDalFactory = () => {
         getAllUsers: () => User.find(),
 
         getUserById: (id: number) => User.findOne({ id }),
+
+        getUserByEmail: (email: string) => User.findOne({ email }),
     };
 
     return user;

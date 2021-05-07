@@ -1,8 +1,8 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../../src/entity/User";
 import { Context } from "../types/context";
-import { encrypt } from "../utils/encrypt.utils";
-import { handleError } from "../utils/error.utils";
+import EncryptUtils, { encrypt } from "../utils/encrypt.utils";
+import { handleError, throwErrorOnCondition } from "../utils/error.utils";
 
 @Resolver()
 export class UserResolver {
@@ -26,6 +26,17 @@ export class UserResolver {
         return await context.db.user.getUserById(id) as User;
     }
 
+    @Query(() => Boolean)
+    async login(
+        @Arg('email', () => String) email: string,
+        @Arg('password', () => String) password: string,
+        @Ctx() context: Context,
+    ): Promise<boolean> {
+        const user = await context.db.user.getUserByEmail(email) as User;
+        throwErrorOnCondition(!user, "Could not find user");
+
+        return await EncryptUtils.compare(password, user.password);
+    }
 
     @Mutation(() => Boolean)
     async register(
@@ -36,7 +47,7 @@ export class UserResolver {
         try {
             await context.db.user.insertUser({
                 email,
-                password: await encrypt(password, 12),
+                password: await EncryptUtils.encrypt(password, 12),
             } as User);
             return true;
         } catch (err) {
