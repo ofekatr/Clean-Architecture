@@ -10,8 +10,7 @@ import { createConnection } from "typeorm";
     const app = express();
     app.get('/', (_, res) => res.send("Hello World"));
 
-    const connection = await createConnection();
-    
+    await createConnection();
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
