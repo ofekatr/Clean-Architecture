@@ -1,6 +1,8 @@
-import { handlePublicError } from "../utils/error.utils";
-import { Arg, ID, Mutation, Query, Resolver } from "type-graphql";
-import { User } from "../../src/entity/User";
+import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { BaseUserResponse, User } from "../../src/entity/User";
+import { Throwable } from "../types/general";
+import { encrypt } from "../utils/encrypt.utils";
+import { handleError, handlePublicError } from "../utils/error.utils";
 
 @Resolver()
 export class UserResolver {
@@ -9,27 +11,27 @@ export class UserResolver {
         return "Hello World!";
     }
 
-    @Query(() => User)
+    @Query(() => [User])
+    async getAllUsers(): Promise<Throwable<User[]>> {
+        try {
+            return await User.find();
+        } catch (err) {
+            return handlePublicError(err, "GET ALL USERS");
+        }
+    }
+
+    @Query(() => User, { nullable: true })
     async getUserById(
-        @Arg("id", () => ID) id: number
-    ): Promise<User | undefined> {
+        @Arg("id", () => Number) id: number
+    ): Promise<User> {
         try {
             return await User.findOne({
                 where: {
                     id,
                 },
-            });
+            }) as User;
         } catch (err) {
             return handlePublicError(err, "GET USER BY ID");
-        }
-    }
-
-    @Query(() => [User])
-    async getAllUsers(): Promise<User[]> {
-        try {
-            return await User.find();
-        } catch (err) {
-            return handlePublicError(err, "GET ALL USERS");
         }
     }
 
@@ -41,12 +43,13 @@ export class UserResolver {
         try {
             const { raw } = await User.insert({
                 email,
-                password: await hash(password, 12),
+                password: await encrypt(password, 12),
             });
             
             return raw;
         } catch (err) {
-            return handlePublicError(err, "REGISTER USER");
+            handleError(err);
+            return handlePublicError(err, "Failed to register user");
         }
     }
 }
