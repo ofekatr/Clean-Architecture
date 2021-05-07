@@ -1,6 +1,6 @@
 # Awesome Project Build with TypeORM
 
-## In progress.
+## In Progress
 
 Steps to run this project:
 
