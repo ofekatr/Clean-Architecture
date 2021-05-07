@@ -1,7 +1,9 @@
-import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver, UseMiddleware } from "type-graphql";
 import { User } from "../entity/User";
 import EncryptLib from "../libs/encrypt.lib";
 import JWTLib from "../libs/jwt.lib";
+import logger from "../logger/logger";
+import { isAuthMiddleware } from "../middlewares/auth.mid";
 import { IGraphQLSContext } from "../types/context";
 import { handleError, throwErrorOnCondition } from "../utils/error.utils";
 
@@ -16,6 +18,14 @@ export class UserResolver {
     @Query(() => String)
     hello(): string {
         return "Hello World!";
+    }
+
+    @Query(() => String)
+    @UseMiddleware(isAuthMiddleware)
+    bye(
+        @Ctx() context: IGraphQLSContext,
+    ): string{
+        return `${context.payload.userId}`;
     }
 
     @Query(() => [User])
@@ -45,11 +55,11 @@ export class UserResolver {
         const valid = await EncryptLib.compare(password, user.password);
         throwErrorOnCondition(!valid, "Failed to login");
 
-        res.cookie('jid', JWTLib.generateRefreshToken({ userId: user.id, email: user.email }), {
+        res.cookie('jid', JWTLib.generateRefreshToken(user), {
             httpOnly: true,
         })
         return {
-            accessToken: JWTLib.generateAccessToken({ userId: user.id, email: user.email }),
+            accessToken: JWTLib.generateAccessToken(user),
         }
     }
 
