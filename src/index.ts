@@ -5,6 +5,7 @@ import { buildSchema } from "type-graphql";
 import { initContext } from "./context";
 import logger from "./logger/logger";
 import { UserResolver } from "./resolvers/user.resolver";
+import { IGraphQLSContext } from "./types/context";
 
 (async () => {
     const context = await initContext();
@@ -14,7 +15,7 @@ import { UserResolver } from "./resolvers/user.resolver";
                 UserResolver,
             ],
         }),
-        context,
+        context: ({ req, res }) => ({ req, res, ...context } as IGraphQLSContext),
     });
 
     const port = 8080;

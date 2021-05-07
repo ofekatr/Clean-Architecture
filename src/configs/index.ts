@@ -5,9 +5,11 @@ dotenv.config();
 
 const globalConfig = (({
     NODE_ENV: nodeEnv = '',
-    JWT_KEY: jwtKey = '',
+    JWT_ACCESS_KEY: jwtAccessKey = '',
+    JWT_REFRESH_KEY: jwtRefreshKey = '',
 }) => ({
-    jwtKey,
+    jwtAccessKey,
+    jwtRefreshKey,
     nodeEnv
 }))(process.env);
 

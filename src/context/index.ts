@@ -1,7 +1,7 @@
-import { Context } from "../types/context";
+import { IBaseContext } from "../types/context";
 import { initDatabase } from "./db";
 
-export const initContext = async (): Promise<Context> => {
+export const initContext = async (): Promise<IBaseContext> => {
     const db = await initDatabase();
 
     return {
