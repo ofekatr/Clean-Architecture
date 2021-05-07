@@ -1,5 +1,7 @@
 # Awesome Project Build with TypeORM
 
+In progress.
+
 Steps to run this project:
 
 1. Run `npm i` command
