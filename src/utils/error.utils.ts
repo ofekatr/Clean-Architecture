@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-server-errors";
-import logger from "../logs/logger";
+import logger from "../logger/logger";
 import { GeneralObject } from "../types/general";
 
 const DEF_PUBLIC_ERROR_DESC = "An error has occurred";
