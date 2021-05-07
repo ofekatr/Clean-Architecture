@@ -8,7 +8,7 @@ const generateAccessToken = (payload: Payload) => jwt.sign(payload, globalConfig
 });
 
 const generateRefreshToken = (payload: Payload) => jwt.sign(payload, globalConfig.jwtRefreshKey, {
-    expiresIn: "15m",
+    expiresIn: "7d",
 });
 
 const JWTLib = {

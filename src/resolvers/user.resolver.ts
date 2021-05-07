@@ -45,7 +45,9 @@ export class UserResolver {
         const valid = await EncryptLib.compare(password, user.password);
         throwErrorOnCondition(!valid, "Failed to login");
 
-        res.cookie('jid', JWTLib.generateRefreshToken({ userId: user.id, email: user.email }))
+        res.cookie('jid', JWTLib.generateRefreshToken({ userId: user.id, email: user.email }), {
+            httpOnly: true,
+        })
         return {
             accessToken: JWTLib.generateAccessToken({ userId: user.id, email: user.email }),
         }
