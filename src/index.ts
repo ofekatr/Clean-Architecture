@@ -3,6 +3,7 @@ import express from "express";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { initContext } from "./context";
+import logger from "./logger/logger";
 import { UserResolver } from "./resolvers/user.resolver";
 
 (async () => {
@@ -19,5 +20,5 @@ import { UserResolver } from "./resolvers/user.resolver";
     const port = 8080;
     const app = express();
     apolloServer.applyMiddleware({ app });
-    app.listen(port, () => console.log(`Server started.\nListening on port ${port}`));
+    app.listen(port, () => logger.log(`Server started.\nListening on port ${port}`));
 })();

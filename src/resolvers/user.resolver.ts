@@ -1,8 +1,15 @@
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { User } from "../../src/entity/User";
+import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver } from "type-graphql";
+import { User } from "../entity/User";
+import EncryptLib from "../libs/encrypt.lib";
+import JWTLib from "../libs/jwt.lib";
 import { Context } from "../types/context";
-import EncryptUtils, { encrypt } from "../utils/encrypt.utils";
 import { handleError, throwErrorOnCondition } from "../utils/error.utils";
+
+@ObjectType()
+class LoginResponse {
+    @Field(() => String)
+    accessToken: string;
+}
 
 @Resolver()
 export class UserResolver {
@@ -17,7 +24,7 @@ export class UserResolver {
     ): Promise<User[]> {
         return await context.db.user.getAllUsers();
     }
-    
+
     @Query(() => User, { nullable: true })
     async getUserById(
         @Ctx() context: Context,
@@ -26,16 +33,21 @@ export class UserResolver {
         return await context.db.user.getUserById(id) as User;
     }
 
-    @Query(() => Boolean)
+    @Query(() => LoginResponse)
     async login(
         @Arg('email', () => String) email: string,
         @Arg('password', () => String) password: string,
         @Ctx() context: Context,
-    ): Promise<boolean> {
+    ): Promise<LoginResponse> {
         const user = await context.db.user.getUserByEmail(email) as User;
         throwErrorOnCondition(!user, "Could not find user");
 
-        return await EncryptUtils.compare(password, user.password);
+        const valid = await EncryptLib.compare(password, user.password);
+        throwErrorOnCondition(!valid, "Failed to login");
+
+        return {
+            accessToken: JWTLib.sign({ email: user.email }),
+        }
     }
 
     @Mutation(() => Boolean)
@@ -47,7 +59,7 @@ export class UserResolver {
         try {
             await context.db.user.insertUser({
                 email,
-                password: await EncryptUtils.encrypt(password, 12),
+                password: await EncryptLib.encrypt(password, 12),
             } as User);
             return true;
         } catch (err) {

@@ -5,3 +5,6 @@ build/
 tmp/
 temp/
 ormconfig.json
+dist
+.env
+.package-lock.json
