@@ -2,8 +2,8 @@ import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver, UseMiddleware }
 import { User } from "../entity/User";
 import JWTLib from "../lib/jwt.lib";
 import { isAuthMiddleware } from "../middleware/graphql/auth.mid";
-import UserService from "../service/user.service";
 import { IGraphQLContext } from "../type/context";
+import { IUserService } from "../type/services";
 
 @ObjectType()
 class LoginResponse {
@@ -13,6 +13,8 @@ class LoginResponse {
 
 @Resolver()
 export class UserResolver {
+    static userService: IUserService;
+
     @Query(() => String)
     hello(): string {
         return "Hello World!";
@@ -30,26 +32,26 @@ export class UserResolver {
     getAllUsers(
         @Ctx() context: IGraphQLContext,
     ): Promise<User[]> {
-        return UserService.getAllUsers(context);
+        return context.services.userService.getAllUsers();
     }
 
     @Query(() => User, { nullable: true })
     async getUserById(
         @Ctx() context: IGraphQLContext,
-        @Arg('id', () => Number) id: number,
+        @Arg("id", () => Number) id: number,
     ): Promise<User> {
-        return UserService.getUserById(context, id) as Promise<User>;
+        return context.services.userService.getUserById(id) as Promise<User>;
     }
 
     @Query(() => LoginResponse)
     async login(
-        @Arg('email', () => String) email: string,
-        @Arg('password', () => String) password: string,
+        @Arg("email", () => String) email: string,
+        @Arg("password", () => String) password: string,
         @Ctx() context: IGraphQLContext,
     ): Promise<LoginResponse> {
-        const user = await UserService.login(context, email, password);
+        const user = await context.services.userService.login(email, password);
 
-        context.res.cookie('jid', JWTLib.generateRefreshToken(user), {
+        context.res.cookie("jid", JWTLib.generateRefreshToken(user), {
             httpOnly: true,
         })
 
@@ -60,10 +62,10 @@ export class UserResolver {
 
     @Mutation(() => Boolean)
     async register(
-        @Arg('email', () => String) email: string,
-        @Arg('password', () => String) password: string,
+        @Arg("email", () => String) email: string,
+        @Arg("password", () => String) password: string,
         @Ctx() context: IGraphQLContext,
     ): Promise<boolean> {
-        return UserService.insertUser(context, email, password);
+        return context.services.userService.insertUser(email, password);
     }
 }

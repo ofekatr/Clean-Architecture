@@ -3,9 +3,9 @@ import { throwErrorOnCondition } from "../util/error.utils";
 import { checkIfObjectHasFalseyValues } from "../util/object-utils";
 
 const extractGlobalConfigPropsFromObject = ({
-    NODE_ENV: nodeEnv = '',
-    JWT_ACCESS_KEY: jwtAccessKey = '',
-    JWT_REFRESH_KEY: jwtRefreshKey = '',
+    NODE_ENV: nodeEnv = "",
+    JWT_ACCESS_KEY: jwtAccessKey = "",
+    JWT_REFRESH_KEY: jwtRefreshKey = "",
     PORT: port = 8080,
 }) => ({
     jwtAccessKey,

@@ -2,7 +2,7 @@ import { createUnionType, Field, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
-@Entity('users')
+@Entity("users")
 export class User extends BaseEntity {
     @Field(() => Number)
     @PrimaryGeneratedColumn()
