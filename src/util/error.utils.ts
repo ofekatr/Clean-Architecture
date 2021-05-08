@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-server-errors";
-import { DEF_PUBLIC_ERROR_DESC, DEF_PUBLIC_ERROR_STATUS } from "../constants/error.constants";
+import { DEF_PUBLIC_ERROR_DESC, DEF_PUBLIC_ERROR_STATUS } from "../constant/error.constants";
 import logger from "../logger/logger";
 import { GeneralObject } from "../type/general";
 
