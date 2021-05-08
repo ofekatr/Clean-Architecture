@@ -1,8 +1,12 @@
-# Awesome Project Build with TypeORM
+#  Clean Architecture Practice
 
 ## In Progress
 
-A Clean Architecture practice - Includes an implementation for safe usage of JWT authentication.
+A Full Stack app for Clean Architecture practice.
+
+Implemented in TypeScript with Node.js, Express.js, PostgresQL, TypeORM, GraphQL, TypeGraphQL and React.
+
+Includes an implementation for safe usage of JWT authentication - Using access and refresh tokens mechanism.
 
 Steps to run this project:
 
