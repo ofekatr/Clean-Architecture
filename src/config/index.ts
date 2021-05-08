@@ -1,6 +1,6 @@
 import "dotenv/config";
-import { throwErrorOnCondition } from "../utils/error.utils";
-import { checkIfObjectHasFalseyValues } from "../utils/object-utils";
+import { throwErrorOnCondition } from "../util/error.utils";
+import { checkIfObjectHasFalseyValues } from "../util/object-utils";
 
 const globalConfig = (({
     NODE_ENV: nodeEnv = '',

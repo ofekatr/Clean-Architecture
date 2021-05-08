@@ -1,4 +1,4 @@
-import { IBaseContext } from "../types/context";
+import { IBaseContext } from "../type/context";
 import { initDatabase } from "./db";
 
 export const initContext = async (): Promise<IBaseContext> => {

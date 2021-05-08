@@ -4,8 +4,8 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { initContext } from "./context";
 import logger from "./logger/logger";
-import { UserResolver } from "./resolvers/user.resolver";
-import { IGraphQLSContext } from "./types/context";
+import { UserResolver } from "./resolver/user.resolver";
+import { IGraphQLContext } from "./type/context";
 
 (async () => {
     const context = await initContext();
@@ -15,7 +15,7 @@ import { IGraphQLSContext } from "./types/context";
                 UserResolver,
             ],
         }),
-        context: ({ req, res }) => ({ req, res, ...context } as IGraphQLSContext),
+        context: ({ req, res }) => ({ req, res, ...context } as IGraphQLContext),
     });
 
     const port = 8080;

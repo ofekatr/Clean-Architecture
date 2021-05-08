@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import globalConfig from "../configs";
+import globalConfig from "../config";
 import { User } from "../entity/User";
-import { IPayload } from "../types/context";
+import { IPayload } from "../type/context";
 
 const generateAccessToken = (user: User) =>
     jwt.sign(

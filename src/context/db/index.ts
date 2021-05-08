@@ -1,5 +1,5 @@
 import { createConnection } from "typeorm";
-import { DAO } from "../../types/database";
+import { DAO } from "../../type/database";
 import userDalFactory from "./user.db";
 
 export const initDatabase = async (): Promise<DAO> => {

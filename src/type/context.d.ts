@@ -10,7 +10,7 @@ export interface IPayload {
     email: string;
 }
 
-export interface IGraphQLSContext extends IBaseContext {
+export interface IGraphQLContext extends IBaseContext {
     req: Request;
     res: Response;
     payload: IPayload;

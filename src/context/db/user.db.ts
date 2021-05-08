@@ -1,5 +1,5 @@
 import { User } from "../../entity/User";
-import { UserDAL } from "../../types/database";
+import { UserDAL } from "../../type/database";
 
 const userDalFactory = () => {
     const user: UserDAL = {

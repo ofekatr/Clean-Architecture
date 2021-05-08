@@ -1,16 +1,20 @@
+import { Request } from "express";
 import { MiddlewareFn } from "type-graphql";
-import { verifyAccessToken } from "../libs/jwt.lib";
-import { IGraphQLSContext } from "../types/context";
-import { handleError, throwErrorOnCondition } from "../utils/error.utils";
+import { verifyAccessToken } from "../../lib/jwt.lib";
+import { IGraphQLContext } from "../../type/context";
+import { handleError, throwErrorOnCondition } from "../../util/error.utils";
 
 const extractRefreshTokenFromAuthorizationHeader = (header: string) => header.split(" ")[1];
 
-const isAuthMiddleware: MiddlewareFn<IGraphQLSContext> = (
-    { context }: { context: IGraphQLSContext },
+const getAutorizationHeaderFromRequest = (req: Request): string | undefined =>
+    req?.headers?.authorization;
+
+const isAuthMiddleware: MiddlewareFn<IGraphQLContext> = (
+    { context }: { context: IGraphQLContext },
     next
 ) => {
     try {
-        const authorizationHeader = context.req.headers.authorization as string;
+        const authorizationHeader = getAutorizationHeaderFromRequest(context.req) as string;
         throwErrorOnCondition(
             !authorizationHeader,
             "Missing Authorization header",
