@@ -1,4 +1,4 @@
-# Awesome Project Build with TypeORM
+#  Clean Architecture Practice
 
 ## In Progress
 
