@@ -1,6 +1,7 @@
 import { User } from "../entity/User";
 
 export interface IUserService {
+    incrementRefreshTokenVersion(userId: number);
     getAllUsers: () => Promise<User[]>;
     getUserById: (id: number) => Promise<User | undefined>;
     login: (email: string, password: string) => Promise<User>;

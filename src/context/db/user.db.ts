@@ -7,9 +7,13 @@ const userDalFactory = () => {
 
         getAllUsers: () => User.find(),
 
-        getUserById: (id: number) => User.findOne({ id }),
+        getUserById: (userId: number) => User.findOne({ id: userId }),
 
         getUserByEmail: (email: string) => User.findOne({ email }),
+
+        incrementRefreshTokenVersion: (userId: number) =>
+            User.getRepository()
+                .increment({ id: userId }, "refreshTokenVersion", 1),
     };
 
     return user;

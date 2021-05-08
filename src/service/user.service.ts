@@ -32,11 +32,16 @@ const userServiceFactory = (context: ServiceContext): IUserService => {
         }
     }
 
+    const incrementRefreshTokenVersion = (userId: number) => {
+        context.db.user.incrementRefreshTokenVersion(userId);
+    }
+
     const UserService = {
         getAllUsers,
         getUserById,
         login,
         insertUser,
+        incrementRefreshTokenVersion,
     }
 
     return UserService;

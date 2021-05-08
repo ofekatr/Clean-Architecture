@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import globalConfig from "../config/global.config";
 import { User } from "../entity/User";
-import { IPayload } from "../type/context";
+import { IAccessPayload, IRefreshPayload } from "../type/context";
 
 const generateAccessToken = (user: User) =>
     jwt.sign(
@@ -11,17 +11,21 @@ const generateAccessToken = (user: User) =>
     );
 
 const verifyAccessToken = (token: string) =>
-    jwt.verify(token, globalConfig.jwtAccessKey) as IPayload;
+    jwt.verify(token, globalConfig.jwtAccessKey) as IAccessPayload;
 
 const generateRefreshToken = (user: User) =>
     jwt.sign(
-        { userId: user.id, email: user.email },
+        {
+            userId: user.id,
+            email: user.email,
+            refreshTokenVersion: user.refreshTokenVersion
+        },
         globalConfig.jwtRefreshKey,
         { expiresIn: "7d" }
     );
 
 const verifyRefreshToken = (token: string) =>
-    jwt.verify(token, globalConfig.jwtRefreshKey) as IPayload;
+    jwt.verify(token, globalConfig.jwtRefreshKey) as IRefreshPayload;
 
 const JWTLib = {
     generateAccessToken,

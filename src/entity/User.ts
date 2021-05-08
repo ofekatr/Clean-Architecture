@@ -1,10 +1,10 @@
-import { createUnionType, Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity("users")
 export class User extends BaseEntity {
-    @Field(() => Number)
+    @Field(() => Int)
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -14,6 +14,10 @@ export class User extends BaseEntity {
 
     @Column()
     password: string;
+
+    @Field(() => Int)
+    @Column("int", { default: 0 })
+    refreshTokenVersion: number;
 }
 
 @ObjectType()

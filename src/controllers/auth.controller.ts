@@ -1,11 +1,16 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import { User } from "../entity/User";
-import JWTLib, { generateRefreshToken } from "../lib/jwt.lib";
+import JWTLib from "../lib/jwt.lib";
 import { IAuthController } from "../type/controllers";
 import { IUserService } from "../type/services";
 import { throwErrorOnCondition } from "../util/error.utils";
 
 const authControllerFactory = (userService: IUserService): IAuthController => {
+    const attachRefreshTokenCookie = (res: Response, user: User) =>
+        res.cookie("jid", JWTLib.generateRefreshToken(user), {
+            httpOnly: true,
+        });
+
     const refreshAccessToken = async (
         req: Request,
         res: Response,
@@ -17,9 +22,16 @@ const authControllerFactory = (userService: IUserService): IAuthController => {
         throwErrorOnCondition(!payload?.userId, `Payload is missing user ID - ${payload}`);
 
         const user = await userService.getUserById(payload.userId) as User;
-        throwErrorOnCondition(!user, `User ID: ${payload.userId} - Failed to retrieve user from DB`);
+        throwErrorOnCondition(
+            !user,
+            `User ID: ${payload.userId} - Failed to retrieve user from DB`
+        );
+        throwErrorOnCondition(
+            user.refreshTokenVersion !== payload.refreshTokenVersion,
+            `User ID: ${user.id} - Invalid refresh token version`,
+        );
 
-        res.cookie("jid", generateRefreshToken(user));
+        attachRefreshTokenCookie(res, user);
 
         return JWTLib.generateAccessToken(user);
     }

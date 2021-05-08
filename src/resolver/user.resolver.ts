@@ -1,9 +1,10 @@
-import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver, UseMiddleware } from "type-graphql";
+import { Arg, Ctx, Field, Int, Mutation, ObjectType, Query, Resolver, UseMiddleware } from "type-graphql";
 import { User } from "../entity/User";
 import JWTLib from "../lib/jwt.lib";
 import { isAuthMiddleware } from "../middleware/graphql/auth.mid";
 import { IGraphQLContext } from "../type/context";
 import { IUserService } from "../type/services";
+import { handleError } from "../util/error.utils";
 
 @ObjectType()
 class LoginResponse {
@@ -26,6 +27,20 @@ export class UserResolver {
         @Ctx() context: IGraphQLContext,
     ): string {
         return `${context.payload.userId}`;
+    }
+
+    @Mutation(() => Boolean)
+    async revokeRefreshTokensForUser(
+        @Arg("userId", () => Int) userId: number,
+        @Ctx() context: IGraphQLContext,
+    ): Promise<boolean> {
+        try {
+            await context.services.userService.incrementRefreshTokenVersion(userId);
+            return true;
+        } catch (err) {
+            handleError(err);
+            return false;
+        }
     }
 
     @Query(() => [User])
