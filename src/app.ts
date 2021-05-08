@@ -2,7 +2,7 @@ import { ApolloServer } from "apollo-server-express";
 import express, { Express } from "express";
 import { buildSchema } from "type-graphql";
 import { initServiceContext } from "./context";
-import initControllers from "./controllers";
+import initControllers from "./controller";
 import { UserResolver } from "./resolver/user.resolver";
 import appRouterFactory from "./router/server.router";
 import initServices from "./service";
