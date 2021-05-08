@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import globalConfig from "../config";
+import globalConfig from "../config/global.config";
 import { User } from "../entity/User";
 import { IPayload } from "../type/context";
 
