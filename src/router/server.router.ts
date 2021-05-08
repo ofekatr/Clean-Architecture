@@ -3,7 +3,7 @@ import { Router } from "express";
 import { IControllers } from "../type/controllers";
 import authRouterFactory from "./auth.router";
 
-const serverRouterFactory = (controllers: IControllers) => {
+const appRouterFactory = (controllers: IControllers) => {
     const serverRouter = Router();
 
     serverRouter.use(cookieParser());
@@ -13,4 +13,4 @@ const serverRouterFactory = (controllers: IControllers) => {
     return serverRouter;
 }
 
-export default serverRouterFactory;
+export default appRouterFactory;

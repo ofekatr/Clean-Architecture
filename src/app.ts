@@ -4,7 +4,7 @@ import { buildSchema } from "type-graphql";
 import { initServiceContext } from "./context";
 import initControllers from "./controllers";
 import { UserResolver } from "./resolver/user.resolver";
-import serverRouterFactory from "./router/server.router";
+import appRouterFactory from "./router/server.router";
 import initServices from "./service";
 import { IGraphQLContext } from "./type/context";
 
@@ -23,7 +23,7 @@ const initApp = async (): Promise<Express> => {
     });
 
     const app = express();
-    app.use("/", serverRouterFactory(controllers));
+    app.use("/", appRouterFactory(controllers));
     apolloServer.applyMiddleware({ app });
 
     return app;
