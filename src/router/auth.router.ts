@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 import { User } from "../entity/User";
 import JWTLib from "../lib/jwt.lib";
-import { IPayload } from "../type/context";
 import { IUserService } from "../type/services";
 import { handleError, throwErrorOnCondition } from "../util/error.utils";
 
@@ -18,7 +17,7 @@ const authRouterFactory = (userService: IUserService) => {
 
             const payload = JWTLib.verifyRefreshToken(token);
             throwErrorOnCondition(!payload?.userId, `Payload is missing user ID - ${payload}`);
-            
+
             const user = await userService.getUserById(payload.userId) as User;
             throwErrorOnCondition(!user, `User ID: ${payload.userId} - Failed to retrieve user from DB`);
 
