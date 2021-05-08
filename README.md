@@ -3,7 +3,7 @@
 ## In Progress
 
 A Clean Architecture practice - Includes an implementation for safe usage of JWT authentication.
----
+--
 Steps to run this project:
 
 1. Run `npm i` command
