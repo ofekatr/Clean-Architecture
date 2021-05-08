@@ -2,7 +2,8 @@
 
 ## In Progress
 
-A Clean Architecture practice - Includes an implementation for safe usage of JWT authentication.
+A Clean Architecture practice.
+Includes an implementation for safe usage of JWT authentication - Using access and refresh tokens mechanism.
 
 Steps to run this project:
 
