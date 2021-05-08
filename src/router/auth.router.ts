@@ -1,10 +1,8 @@
 import { Request, Response, Router } from "express";
-import { User } from "../entity/User";
-import JWTLib from "../lib/jwt.lib";
-import { IUserService } from "../type/services";
-import { handleError, throwErrorOnCondition } from "../util/error.utils";
+import { IAuthController } from "../type/controllers";
+import { handleError } from "../util/error.utils";
 
-const authRouterFactory = (userService: IUserService) => {
+const authRouterFactory = (authController: IAuthController) => {
     const authRouter = Router();
 
     authRouter.post("/refresh-token", async (
@@ -12,17 +10,7 @@ const authRouterFactory = (userService: IUserService) => {
         res: Response,
     ) => {
         try {
-            const token = req.cookies.jid;
-            throwErrorOnCondition(!token, "Missing refresh token");
-
-            const payload = JWTLib.verifyRefreshToken(token);
-            throwErrorOnCondition(!payload?.userId, `Payload is missing user ID - ${payload}`);
-
-            const user = await userService.getUserById(payload.userId) as User;
-            throwErrorOnCondition(!user, `User ID: ${payload.userId} - Failed to retrieve user from DB`);
-
-            const accessToken = JWTLib.generateAccessToken(user);
-
+            const accessToken = await authController.refreshAccessToken(req, res);
             return res.send({
                 ok: true,
                 accessToken,

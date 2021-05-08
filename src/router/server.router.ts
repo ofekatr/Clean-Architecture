@@ -1,14 +1,14 @@
 import cookieParser from "cookie-parser";
 import { Router } from "express";
-import { IServices } from "../type/services";
+import { IControllers } from "../type/controllers";
 import authRouterFactory from "./auth.router";
 
-const serverRouterFactory = (services: IServices) => {
+const serverRouterFactory = (controllers: IControllers) => {
     const serverRouter = Router();
 
     serverRouter.use(cookieParser());
 
-    serverRouter.use("/auth", authRouterFactory(services.userService));
+    serverRouter.use("/auth", authRouterFactory(controllers.authController));
 
     return serverRouter;
 }
