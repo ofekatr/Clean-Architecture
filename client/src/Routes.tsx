@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import PageLoader from "./components/PageLoader";
 import Layout from "./layout/Layout";
 const Home = React.lazy(() => import("./pages/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
@@ -8,7 +9,7 @@ const Register = React.lazy(() => import("./pages/Register"));
 const Router: React.FC = () => {
   return (
     <>
-      <React.Suspense fallback={() => <div>Loading...</div>}>
+      <React.Suspense fallback={<PageLoader />}>
         <BrowserRouter>
           <Layout>
             <Switch>
