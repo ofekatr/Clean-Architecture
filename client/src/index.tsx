@@ -1,39 +1,11 @@
-import {
-  ApolloClient,
-  ApolloLink,
-  concat,
-  HttpLink,
-  InMemoryCache,
-} from "@apollo/client";
-import { ApolloProvider } from "@apollo/client/react";
+import { ApolloProvider } from "@apollo/client/react/context/ApolloProvider";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { createAuthorizationHeader } from "./services/jwt.service";
-
-const httpLink = new HttpLink({
-  uri: "http://localhost:8080/graphql",
-});
-
-const authMiddleware = new ApolloLink((operation, forward) => {
-  // add the authorization to the headers
-  operation.setContext({
-    headers: {
-      authorization: createAuthorizationHeader(),
-    },
-  });
-
-  return forward(operation);
-});
-
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  credentials: "include",
-  link: concat(authMiddleware, httpLink),
-});
+import { createApolloClient } from "./services/apollo.service";
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
+  <ApolloProvider client={createApolloClient()}>
     <App />
   </ApolloProvider>,
   document.getElementById("root")
