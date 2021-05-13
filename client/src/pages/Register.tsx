@@ -1,10 +1,6 @@
 import React from 'react';
 
-interface RegisterProps {
-
-}
-
-const Register: React.FC<RegisterProps> = ({}) => {
+const Register: React.FC = () => {
      return (
         <div>Register Works!</div>
     );

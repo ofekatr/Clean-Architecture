@@ -1,12 +1,8 @@
 import React from 'react';
 
-interface FooterProps {
-
-}
-
-const Footer: React.FC<FooterProps> = ({}) => {
+const Footer: React.FC = () => {
      return (
-         <div></div>
+        <div>Footer</div>
     );
 }
 

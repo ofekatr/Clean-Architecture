@@ -1,9 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 
-interface HeaderProps {}
-
-const Header: React.FC<HeaderProps> = ({}) => {
+const Header: React.FC = () => {
   return (
     <>
       <div>Header</div>
