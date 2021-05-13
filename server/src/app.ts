@@ -24,7 +24,7 @@ const initApp = async (): Promise<Express> => {
 
     const app = express();
     app.use("/", appRouterFactory(controllers));
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({ app, cors: false });
 
     return app;
 }

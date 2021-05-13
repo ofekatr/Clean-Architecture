@@ -7,11 +7,13 @@ const extractGlobalConfigPropsFromObject = ({
     JWT_ACCESS_KEY: jwtAccessKey = "",
     JWT_REFRESH_KEY: jwtRefreshKey = "",
     PORT: port = 8080,
+    CLIENT_HOST: clientHost = "",
 }) => ({
     jwtAccessKey,
     jwtRefreshKey,
     nodeEnv,
     port,
+    clientHost,
 });
 
 const globalConfig = extractGlobalConfigPropsFromObject(process.env);
