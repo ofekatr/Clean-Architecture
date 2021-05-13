@@ -17,7 +17,7 @@ const isAuthMiddleware: MiddlewareFn<IGraphQLContext> = (
         const authorizationHeader = getAutorizationHeaderFromRequest(context.req) as string;
         throwErrorOnCondition(
             !authorizationHeader,
-            "Missing Authorization header",
+            "Missing authorization header",
         );
 
         const refreshToken = extractRefreshTokenFromAuthorizationHeader(authorizationHeader);
@@ -32,7 +32,7 @@ const isAuthMiddleware: MiddlewareFn<IGraphQLContext> = (
         return next();
     } catch (err) {
         handleError(err);
-        throw new Error("User is Unauthenticated");
+        throw new Error("User is unauthenticated");
     }
 }
 

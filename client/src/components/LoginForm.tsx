@@ -2,6 +2,7 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import { useLoginMutation } from "../generated/graphql";
 import useForm from "../hooks/useForm";
+import { setAccessToken } from "../services/jwt.service";
 import { GeneralObjectFunction } from "../types/general";
 
 interface IFormValues {
@@ -13,10 +14,15 @@ const LoginForm: React.FC<RouteComponentProps> = ({ history }) => {
   const [login] = useLoginMutation();
 
   const onSubmitCallback = async (values: IFormValues) => {
-    await login({
+    const { data } = await login({
       variables: values,
     });
-    
+
+    const accessToken = data?.login?.accessToken;
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
+
     history.push("/");
   };
 

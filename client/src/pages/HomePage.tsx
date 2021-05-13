@@ -1,8 +1,10 @@
 import React from "react";
+import Bye from "../components/Bye";
 import PageLoader from "../components/PageLoader";
+import UsersList from "../components/UsersList";
 import { useGetAllUsersQuery } from "../generated/graphql";
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
   const { data, loading } = useGetAllUsersQuery({
     fetchPolicy: "network-only",
   });
@@ -14,15 +16,10 @@ const Home: React.FC = () => {
   return (
     <>
       <div>Home</div>
-      {
-        <ul>
-          {data.getAllUsers.map(({ id, email }) => (
-            <li key={id}>{`User ID - ${id}, Email: ${email}`}</li>
-          ))}
-        </ul>
-      }
+      <UsersList users={data.getAllUsers} />
+      <Bye />
     </>
   );
 };
 
-export default Home;
+export default HomePage;
