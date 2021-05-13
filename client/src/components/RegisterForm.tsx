@@ -13,7 +13,7 @@ const RegisterForm: React.FC<RouteComponentProps> = ({ history }) => {
   const [register] = useRegisterMutation();
 
   const onSubmitCallback = async (values: IFormValues) => {
-    const { data, errors } = await register({
+    await register({
       variables: values,
     });
 
