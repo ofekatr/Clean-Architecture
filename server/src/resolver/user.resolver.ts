@@ -58,7 +58,7 @@ export class UserResolver {
         return context.services.userService.getUserById(id) as Promise<User>;
     }
 
-    @Query(() => LoginResponse)
+    @Mutation(() => LoginResponse)
     async login(
         @Arg("email", () => String) email: string,
         @Arg("password", () => String) password: string,
