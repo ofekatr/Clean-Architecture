@@ -1,4 +1,3 @@
-import { concat } from "@apollo/client";
 import { InMemoryCache } from "@apollo/client/cache/inmemory/inMemoryCache";
 import { ApolloClient } from "@apollo/client/core/ApolloClient";
 import { ApolloLink } from "@apollo/client/link/core/ApolloLink";
@@ -9,7 +8,7 @@ import { getGraphqlEndpoint } from "./api.service";
 import { createAuthorizationHeader, getAccessToken, setAccessToken } from "./jwt.service";
 
 const httpLink = new HttpLink({
-    uri: "http://localhost:8080/graphql",
+    uri: getGraphqlEndpoint(),
     credentials: "include",
 });
 
@@ -53,16 +52,16 @@ const refreshTokenLink = new TokenRefreshLink({
     }
 });
 
-// const links = ApolloLink.from([
-//     authLink,
-//     httpLink,
-//     refreshTokenLink,
-// ]);
+const links = ApolloLink.from([
+    refreshTokenLink,
+    authLink,
+    httpLink,
+]);
 
 function createApolloClient() {
     return new ApolloClient({
         cache: new InMemoryCache(),
-        link: concat(authMiddleware, httpLink),
+        link: links,
     });
 }
 

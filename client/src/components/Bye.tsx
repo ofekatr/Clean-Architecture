@@ -3,7 +3,9 @@ import { useByeQuery } from "../generated/graphql";
 import PageLoader from "./PageLoader";
 
 const Bye: React.FC = () => {
-  const { data, loading, error } = useByeQuery();
+  const { data, loading, error } = useByeQuery({
+    fetchPolicy: "network-only",
+  });
 
   if (error) {
     return <div>Error.</div>;

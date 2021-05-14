@@ -11,7 +11,6 @@ function useRefreshToken() {
                 credentials: "include",
             });
             const body = await data.json();
-            console.log(body);
             if (body.accessToken) {
                 setAccessToken(body.accessToken);
             }

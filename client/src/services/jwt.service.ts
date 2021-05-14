@@ -9,7 +9,6 @@ function getAccessToken(): string {
 }
 
 function createAuthorizationHeader(): string {
-    console.log(accessToken);
     return accessToken ? `Bearer ${accessToken}` : "";
 }
 
