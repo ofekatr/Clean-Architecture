@@ -1,12 +1,14 @@
 #  Clean Architecture Practice
 
-## In Progress
-
-A Full Stack app for Clean Architecture practice.
+A Full Stack app for practice Clean Architecture and safe JWT authorization.
 
 Implemented in TypeScript with Node.js, Express.js, PostgresQL, TypeORM, GraphQL, TypeGraphQL and React.
 
-Includes an implementation for safe usage of JWT authentication - Using access and refresh tokens mechanism.
+Includes an implementation for safe usage of JWT authorization - Using access and refresh tokens mechanism.
+
+- One
+- Two
+- Three
 
 Steps to run this project:
 
