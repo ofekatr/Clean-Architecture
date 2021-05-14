@@ -4,9 +4,9 @@ import { verifyAccessToken } from "../../lib/jwt.lib";
 import { IGraphQLContext } from "../../type/context";
 import { handleError, throwErrorOnCondition } from "../../util/error.utils";
 
-const extractRefreshTokenFromAuthorizationHeader = (header: string) => header.split(" ")[1];
+export const extractRefreshTokenFromAuthorizationHeader = (header: string) => header.split(" ")[1];
 
-const getAutorizationHeaderFromRequest = (req: Request): string | undefined =>
+export const getAutorizationHeaderFromRequest = (req: Request): string | undefined =>
     req?.headers?.authorization;
 
 const isAuthMiddleware: MiddlewareFn<IGraphQLContext> = (

@@ -1,8 +1,10 @@
 import React from "react";
-import Bye from "../components/Bye";
+import LogoutButton from "../components/LogoutButton";
+import Me from "../components/Me";
 import PageLoader from "../components/PageLoader";
 import UsersList from "../components/UsersList";
 import { useGetAllUsersQuery } from "../generated/graphql";
+import { getAccessToken } from "../services/jwt.service";
 
 const HomePage: React.FC = () => {
   const { data, loading } = useGetAllUsersQuery({
@@ -16,8 +18,15 @@ const HomePage: React.FC = () => {
   return (
     <>
       <div>Home</div>
+      <Me />
+      <hr />
       <UsersList users={data.getAllUsers} />
-      <Bye />
+      {getAccessToken() && (
+        <>
+          <hr />
+          <LogoutButton />
+        </>
+      )}
     </>
   );
 };

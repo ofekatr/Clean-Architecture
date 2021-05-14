@@ -1,6 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { useLoginMutation } from "../generated/graphql";
+import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
 import useForm from "../hooks/useForm";
 import { setAccessToken } from "../services/jwt.service";
 import { GeneralObjectFunction } from "../types/general";
@@ -16,6 +16,18 @@ const LoginForm: React.FC<RouteComponentProps> = ({ history }) => {
   const onSubmitCallback = async (values: IFormValues) => {
     const { data } = await login({
       variables: values,
+      update: (cache, { data }) => {
+        if (!data) {
+          return;
+        }
+
+        cache.writeQuery<MeQuery>({
+          query: MeDocument,
+          data: {
+            me: data?.login.user,
+          },
+        });
+      },
     });
 
     const accessToken = data?.login?.accessToken;

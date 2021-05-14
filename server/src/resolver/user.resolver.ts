@@ -1,20 +1,50 @@
 import { Arg, Ctx, Field, Int, Mutation, ObjectType, Query, Resolver, UseMiddleware } from "type-graphql";
 import { User } from "../entity/User";
-import JWTLib from "../lib/jwt.lib";
-import { isAuthMiddleware } from "../middleware/graphql/auth.mid";
+import JWTLib, { verifyAccessToken } from "../lib/jwt.lib";
+import { extractRefreshTokenFromAuthorizationHeader, getAutorizationHeaderFromRequest, isAuthMiddleware } from "../middleware/graphql/auth.mid";
 import { IGraphQLContext } from "../type/context";
 import { IUserService } from "../type/services";
-import { handleError } from "../util/error.utils";
+import { handleError, throwErrorOnCondition } from "../util/error.utils";
 
 @ObjectType()
 class LoginResponse {
     @Field(() => String)
     accessToken: string;
+    @Field(() => User)
+    user: User;
 }
 
 @Resolver()
 export class UserResolver {
     static userService: IUserService;
+
+    @Query(() => User, { nullable: true })
+    async me(
+        @Ctx() context: IGraphQLContext,
+    ): Promise<User | undefined> {
+        try {
+            const authorizationHeader = getAutorizationHeaderFromRequest(context.req) as string;
+            throwErrorOnCondition(
+                !authorizationHeader,
+                "Missing authorization header",
+            );
+
+            const refreshToken = extractRefreshTokenFromAuthorizationHeader(authorizationHeader);
+            throwErrorOnCondition(!refreshToken,
+                "Failed to extract refresh token from authorization header");
+
+            const payload = verifyAccessToken(refreshToken);
+            throwErrorOnCondition(!payload,
+                "Failed to verify refresh token");
+
+            context.payload = payload;
+            return await context.services.userService
+                .getUserById(payload.userId);
+        } catch (err) {
+            handleError(err);
+            return undefined;
+        }
+    }
 
     @Query(() => String)
     hello(): string {
@@ -72,6 +102,7 @@ export class UserResolver {
 
         return {
             accessToken: JWTLib.generateAccessToken(user),
+            user,
         }
     }
 
@@ -82,5 +113,17 @@ export class UserResolver {
         @Ctx() context: IGraphQLContext,
     ): Promise<boolean> {
         return context.services.userService.insertUser(email, password);
+    }
+
+    @Mutation(() => Boolean)
+    logout(
+        @Ctx() context: IGraphQLContext,
+    ): boolean {
+        try {
+            context.res.clearCookie('jid');
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 }
