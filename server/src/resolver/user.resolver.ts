@@ -1,7 +1,7 @@
 import { Arg, Ctx, Field, Int, Mutation, ObjectType, Query, Resolver, UseMiddleware } from "type-graphql";
 import { User } from "../entity/User";
 import JWTLib, { verifyAccessToken } from "../lib/jwt.lib";
-import { extractRefreshTokenFromAuthorizationHeader, getAutorizationHeaderFromRequest, isAuthMiddleware } from "../middleware/graphql/auth.mid";
+import { extractRefreshTokenFromAuthorizationHeader, getAutorizationHeaderFromRequest, isAuthMiddleware, attachRefreshTokenCookie } from "../middleware/graphql/auth.mid";
 import { IGraphQLContext } from "../type/context";
 import { IUserService } from "../type/services";
 import { handleError, throwErrorOnCondition } from "../util/error.utils";
@@ -96,9 +96,7 @@ export class UserResolver {
     ): Promise<LoginResponse> {
         const user = await context.services.userService.login(email, password);
 
-        context.res.cookie("jid", JWTLib.generateRefreshToken(user), {
-            httpOnly: true,
-        })
+        attachRefreshTokenCookie(context.res, user);
 
         return {
             accessToken: JWTLib.generateAccessToken(user),

@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
 import { User } from "../entity/User";
 import JWTLib from "../lib/jwt.lib";
+import { attachRefreshTokenCookie } from "../middleware/graphql/auth.mid";
 import { IAuthController } from "../type/controllers";
 import { IUserService } from "../type/services";
 import { throwErrorOnCondition } from "../util/error.utils";
 
 const authControllerFactory = (userService: IUserService): IAuthController => {
-    const attachRefreshTokenCookie = (res: Response, user: User) =>
-        res.cookie("jid", JWTLib.generateRefreshToken(user), {
-            httpOnly: true,
-        });
-
     const refreshAccessToken = async (
         req: Request,
         res: Response,

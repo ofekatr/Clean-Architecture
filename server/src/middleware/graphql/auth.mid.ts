@@ -1,13 +1,28 @@
-import { Request } from "express";
+import assert from "assert";
+import { Request, Response } from "express";
 import { MiddlewareFn } from "type-graphql";
-import { verifyAccessToken } from "../../lib/jwt.lib";
+import { User } from "../../entity/User";
+import JWTLib, { verifyAccessToken } from "../../lib/jwt.lib";
 import { IGraphQLContext } from "../../type/context";
 import { handleError, throwErrorOnCondition } from "../../util/error.utils";
 
-export const extractRefreshTokenFromAuthorizationHeader = (header: string) => header.split(" ")[1];
+export function extractRefreshTokenFromAuthorizationHeader(header: string): string {
+    return header.split(" ")[1]
+};
 
-export const getAutorizationHeaderFromRequest = (req: Request): string | undefined =>
-    req?.headers?.authorization;
+export function getAutorizationHeaderFromRequest(req: Request): string | undefined {
+    return req?.headers?.authorization;
+}
+
+export function attachRefreshTokenCookie(res: Response, user: User): Response {
+    assert.ok(user, "Missing user argument");
+    assert.ok(res, "Missing res argument");
+
+    return res.cookie("jid", JWTLib.generateRefreshToken(user), {
+        httpOnly: true,
+        path: "/auth/refresh-token",
+    })
+}
 
 const isAuthMiddleware: MiddlewareFn<IGraphQLContext> = (
     { context }: { context: IGraphQLContext },
