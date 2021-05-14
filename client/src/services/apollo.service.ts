@@ -4,11 +4,11 @@ import { ApolloLink } from "@apollo/client/link/core/ApolloLink";
 import { HttpLink } from "@apollo/client/link/http/HttpLink";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
-import { getGraphqlEndpoint } from "./api.service";
+import { getEndpoint } from "./api.service";
 import { createAuthorizationHeader, getAccessToken, setAccessToken } from "./jwt.service";
 
 const httpLink = new HttpLink({
-    uri: getGraphqlEndpoint(),
+    uri: getEndpoint('graphql'),
     credentials: "include",
 });
 
@@ -38,7 +38,7 @@ const refreshTokenLink = new TokenRefreshLink({
             return false;
         }
     },
-    fetchAccessToken: () => fetch("http://localhost:8080/auth/refresh-token", {
+    fetchAccessToken: () => fetch(getEndpoint("refreshToken"), {
         method: "POST",
         credentials: "include",
     }),
