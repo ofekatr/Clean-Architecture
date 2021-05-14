@@ -20,9 +20,9 @@
 
 Steps to run this project:
 
-1. Run `npm i` command
-2. Setup database settings inside `ormconfig.json` file
-3. Setup .env with the following structure:
+1. Run `npm i` command for both client and server.
+2. Setup database settings inside `ormconfig.json` file in the server directory.
+3. Setup .env in the server directory with the following structure:
 ```
 NODE_ENV=<"development" | "production" | "staging" | "test">
 JWT_ACCESS_KEY=<Your private key for JWT access token generation>
@@ -30,4 +30,4 @@ JWT_REFRESH_KEY=<Your private key for JWT access token generation>
 PORT=<The desired port to run the server on>
 CLIENT_HOST=<The client app host, e.g, "http://localhost:3000">
 ```
-4. Run `npm start` command for both the server and the client
+4. Run `npm start` command for both the server and the client.
